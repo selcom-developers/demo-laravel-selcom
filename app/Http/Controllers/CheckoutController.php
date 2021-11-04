@@ -41,18 +41,28 @@ class CheckoutController extends Controller
             'buyer_phone' => $validatedData['buyer_phone'],
             'amount' => $validatedData['amount'],
             'currency' => 'TZS',
-            'webhook' => base64_decode(route('webhook')),
+            'webhook' => base64_encode(route('webhook')),
             'buyer_remarks' => 'None',
             'merchant_remarks' => 'None',
             'no_of_items' => 1,
-            'redirect_url' => base64_decode(route('success')),
+            'redirect_url' =>base64_encode(route('success')),
         ];
-
-        $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
-        $signature = base64_encode(hash_hmac('sha256', $data['order_id'] . $data['buyer_email'] . $data['buyer_name'] . $data['buyer_phone'] . $data['amount'] . $data['currency'] . $data['webhook'] . $data['buyer_remarks'] . $data['merchant_remarks'] . $data['no_of_items'] . $data['redirect_url'], env('API_SECRET'), true));
-        $signed_fields = 'order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
         date_default_timezone_set('Africa/Dar_es_Salaam');
         $date = date('c');
+        $signed_fields = 'order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
+
+        $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
+
+        $fieldsOrder = explode(',', $signed_fields);
+        $signData = "timestamp=".$date;
+        foreach ($fieldsOrder as $key) {
+            $signData .= "&$key=" . $data[$key];
+        }
+
+
+        $signature = base64_encode(hash_hmac('sha256', $signData , env('API_SECRET'), true));
+
+
 
 
 
@@ -61,7 +71,7 @@ class CheckoutController extends Controller
 
 
         $response = Http::withHeaders([
-            'Authorization' => 'SELCOM ' . base64_decode(env('API_KEY')),
+            'Authorization' => 'SELCOM ' . base64_encode(env('API_KEY')),
             'Digest-Method' => 'HS256',
             'Digest' => $signature,
             'Timestamp' => $date,

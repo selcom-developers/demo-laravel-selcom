@@ -22,17 +22,26 @@
                                 <div class="grid grid-cols-6 gap-6">
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="buyer-name" class="block text-sm font-medium text-gray-700">Buyer name</label>
-                                        <input type="text" name="buyer_name" id="buyer_name" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        <input type="text" name="buyer_name" id="buyer_name" autocomplete="" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        @error('buyer_name')
+                                        <p class="text-red-500 text-xs italic mt-4">
+                                            {{ $message }} @enderror
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="buyer_phone" class="block text-sm font-medium text-gray-700">Buyer Phone</label>
-                                        <input type="tel" name="buyer_phone" id="buyer_phone" autocomplete="off" placeholder="255757221600" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        <input type="tel" name="buyer_phone" id="buyer_phone" autocomplete="" placeholder="255757221600" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        @error('buyer_phone')
+                                        <p class="text-red-500 text-xs italic mt-4">
+                                            {{ $message }} @enderror
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-4">
                                         <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
                                         <input type="email" name="email" id="email" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        @error('email')
+                                        <p class="text-red-500 text-xs italic mt-4">
+                                            {{ $message }} @enderror
                                     </div>
 
 
@@ -41,6 +50,9 @@
                                     <div class="col-span-6 sm:col-span-3 lg:col-span-2">
                                         <label for="postal-code" class="block text-sm font-medium text-gray-700">Amount</label>
                                         <input type="number" name="amount" id="amount" autocomplete="amount" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        @error('amount')
+                                        <p class="text-red-500 text-xs italic mt-4">
+                                            {{ $message }} @enderror
                                     </div>
                                 </div>
                             </div>
