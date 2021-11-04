@@ -79,11 +79,13 @@ class CheckoutController extends Controller
         ])->post($endpointUrl, $data);
 
 
-        dd($response->body());
 
-        Log::info('Response: ' . json_encode($response));
 
-        $paymentGatewayUrl = base64_decode($response->json()['data']['payment_gateway_url']);
+        Log::info('Response: ' . $response->body());
+
+        dd(json_decode($response->body()));
+
+        $paymentGatewayUrl = base64_decode(json_decode($response->body())['data']['payment_gateway_url']);
 
         Log::info('Payment Gateway Url: ' . $paymentGatewayUrl);
 
