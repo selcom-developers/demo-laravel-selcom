@@ -71,6 +71,7 @@ class CheckoutController extends Controller
 
 
         $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
             'Authorization' => 'SELCOM ' . base64_encode(env('API_KEY')),
             'Digest-Method' => 'HS256',
             'Digest' => $signature,
@@ -79,10 +80,15 @@ class CheckoutController extends Controller
         ])->post($endpointUrl, $data);
 
 
+        dd($response);
+
         Log::info('Response: ' . json_encode($response));
 
+        $paymentGatewayUrl = base64_decode($response->json()['data']['payment_gateway_url']);
 
+        Log::info('Payment Gateway Url: ' . $paymentGatewayUrl);
 
+        return redirect($paymentGatewayUrl);
     }
 
 
