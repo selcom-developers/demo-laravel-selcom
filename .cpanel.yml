@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/jasilidv/online-websites/demo-selcom/
+    - /bin/cp -r . $DEPLOYPATH
