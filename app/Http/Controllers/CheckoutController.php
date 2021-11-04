@@ -49,7 +49,7 @@ class CheckoutController extends Controller
         ];
         date_default_timezone_set('Africa/Dar_es_Salaam');
         $date = date('c');
-        $signed_fields = 'order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
+        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
 
         $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
 
@@ -60,14 +60,12 @@ class CheckoutController extends Controller
         }
 
 
+
         $signature = base64_encode(hash_hmac('sha256', $signData , env('API_SECRET'), true));
 
 
 
-
-
         Log::info('Signed Fields: ' . $signed_fields. ' Signature: '.$signature. ' Data: '. json_encode($data) . ' Endpoint: '.$endpointUrl. ' Date: '.$date);
-
 
 
         $response = Http::withHeaders([
