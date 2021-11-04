@@ -55,7 +55,9 @@ class CheckoutController extends Controller
         $date = date('c');
 
 
-        Log::info('Signed Fields: ' . $signed_fields. ' Signature: '.$signature. ' Data: '.$data. ' Endpoint: '.$endpointUrl. ' Date: '.$date);
+
+        Log::info('Signed Fields: ' . $signed_fields. ' Signature: '.$signature. ' Data: '. json_encode($data) . ' Endpoint: '.$endpointUrl. ' Date: '.$date);
+
 
 
         $response = Http::withHeaders([
@@ -66,7 +68,10 @@ class CheckoutController extends Controller
             'Signed-Fields' => $signed_fields,
         ])->post($endpointUrl, $data);
 
-        Log::info($response);
+
+        Log::info('Response: ' . json_encode($response));
+
+
 
     }
 
