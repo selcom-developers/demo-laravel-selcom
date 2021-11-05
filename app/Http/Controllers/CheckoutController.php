@@ -31,11 +31,9 @@ class CheckoutController extends Controller
         ]);
 
 
-
-
         $data = [
             'vendor' => env('TILL_NUMBER'),
-            'order_id' => time().'-'.$validatedData['buyer_phone'],
+            'order_id' => time() . '-' . $validatedData['buyer_phone'],
             'buyer_email' => $validatedData['email'],
             'buyer_name' => $validatedData['buyer_name'],
             'buyer_phone' => $validatedData['buyer_phone'],
@@ -45,31 +43,31 @@ class CheckoutController extends Controller
             'buyer_remarks' => 'None',
             'merchant_remarks' => 'None',
             'no_of_items' => 1,
-            'redirect_url' =>base64_encode(route('success')),
+            'redirect_url' => base64_encode(route('success')),
         ];
         date_default_timezone_set('Africa/Dar_es_Salaam');
-        $date = date('c');
+        $requestTimestamp = date('c');
 
         $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
 
         $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
 
         $fieldsOrder = explode(',', $signed_fields);
-        $signData = "timestamp=$date";
-
+        $signData = "timestamp=$requestTimestamp";
 
 
         foreach ($fieldsOrder as $key) {
             $signData .= "&$key=" . $data[$key];
         }
 
-
-
-        $signature = base64_encode(hash_hmac('sha256', $signData , env('API_SECRET'), true));
+//        dd($signData, $signed_fields, env('API_SECRET'));
 
 
 
-        Log::info('Signed Fields: ' . $signed_fields. 'Signed Data: '. $signData .' Signature: '.$signature. ' Data: '. json_encode($data) . ' Endpoint: '.$endpointUrl. ' Date: '.$date);
+        $signature = base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
+
+
+        Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' . json_encode($data) . ' Endpoint: ' . $endpointUrl);
 
 
         $response = Http::withHeaders([
@@ -79,11 +77,9 @@ class CheckoutController extends Controller
             'Authorization' => 'SELCOM ' . base64_encode(env('API_KEY')),
             'Digest-Method' => 'HS256',
             'Digest' => $signature,
-            'Timestamp' => $date,
+            'Timestamp' => $requestTimestamp,
             'Signed-Fields' => $signed_fields,
         ])->post($endpointUrl, $data);
-
-
 
 
         Log::info('Response: ' . $response->body());
