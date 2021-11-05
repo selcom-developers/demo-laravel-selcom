@@ -77,7 +77,8 @@ class CheckoutController extends Controller
             'Signed-Fields' => $signed_fields,
         ])->post($endpointUrl, $data);
 
-        Log::info('Response: ' . $response->body());
+
+        Log::info('Response Body: ' . $response->body() . ' Response Header '. $response->header());
 
         dd(json_decode($response->body()));
 
