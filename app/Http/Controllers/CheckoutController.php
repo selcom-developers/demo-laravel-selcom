@@ -75,7 +75,7 @@ class CheckoutController extends Controller
 
 
 
-        $paymentGatewayUrl = base64_decode(json_decode($response->body())['data']['payment_gateway_url']);
+        $paymentGatewayUrl = base64_decode(json_decode($response->body(), true)['data']['payment_gateway_url']);
 
         Log::info('Payment Gateway Url: ' . $paymentGatewayUrl);
 
