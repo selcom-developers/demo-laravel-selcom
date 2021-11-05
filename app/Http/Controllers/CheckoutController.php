@@ -33,8 +33,8 @@ class CheckoutController extends Controller
         date_default_timezone_set('Africa/Dar_es_Salaam');
         $requestTimestamp = date('c');
 
-        $webhook = base64_encode(route('webhook'));
-        $redirect_url = base64_encode(route('success'));
+        $webhook = base64_encode('https://beta.mrukmarathon.run/webhook');
+        $redirect_url = base64_encode('https://beta.mrukmarathon.run/success');
 
         $data = [
             'vendor' => env('TILL_NUMBER'),
