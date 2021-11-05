@@ -44,30 +44,22 @@ class CheckoutController extends Controller
             'buyer_phone' => $validatedData['buyer_phone'],
             'amount' => $validatedData['amount'],
             'currency' => 'TZS',
-//            'webhook' => $webhook,
+            'webhook' => $webhook,
             'no_of_items' => '1',
-//            'redirect_url' => $redirect_url,
+            'redirect_url' => $redirect_url,
         ];
 
 
         dump(route('webhook'),$webhook, route('success')  , $redirect_url);
 
-        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,no_of_items';
+        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,no_of_items,redirect_url';
 
         $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
 
-        $fieldsOrder = explode(',', $signed_fields);
-        $signData = "timestamp=$requestTimestamp";
 
-        foreach ($fieldsOrder as $key) {
-            $signData .= "&$key=" . $data[$key];
-        }
+        $signature = $this->computeSignature($data, $signed_fields, $requestTimestamp);
 
-        dump($signData);
-
-        $signature = base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
-
-        Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' . json_encode($data));
+        Log::info('Signed Fields: ' . $signed_fields .  ' Signature: ' . $signature . ' Data: ' . json_encode($data));
 
         $response = Http::dump()->withHeaders([
             'Content-Type' => 'application/json;charset=\"utf-8\"',
@@ -92,6 +84,18 @@ class CheckoutController extends Controller
         return redirect($paymentGatewayUrl);
     }
 
+
+    public function computeSignature($data ,$signed_fields, $requestTimestamp)
+    {
+        $fieldsOrder = explode(',', $signed_fields);
+        $signData = "timestamp=$requestTimestamp";
+
+        foreach ($fieldsOrder as $key) {
+            $signData .= "&$key=" . $data[$key];
+        }
+
+        return base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
+    }
 
     public function webhook(Request $request)
     {
