@@ -33,7 +33,7 @@ class CheckoutController extends Controller
 
         $data = [
             'vendor' => env('TILL_NUMBER'),
-            'order_id' => time() . '-' . $validatedData['buyer_phone'],
+            'order_id' => '123',
             'buyer_email' => $validatedData['email'],
             'buyer_name' => $validatedData['buyer_name'],
             'buyer_phone' => $validatedData['buyer_phone'],
@@ -63,9 +63,7 @@ class CheckoutController extends Controller
 
         $signature = base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
 
-
         Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' .json_encode( $data));
-
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json;charset=\"utf-8\"',
@@ -77,7 +75,6 @@ class CheckoutController extends Controller
             'Timestamp' => $requestTimestamp,
             'Signed-Fields' => $signed_fields,
         ])->post($endpointUrl, $data);
-
 
         Log::info('Response: ' . $response->body());
 
