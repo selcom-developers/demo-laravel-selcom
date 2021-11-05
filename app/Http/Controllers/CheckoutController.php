@@ -66,7 +66,7 @@ class CheckoutController extends Controller
 
         Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' .json_encode( $data));
 
-        $response = Http::withHeaders([
+        $response = Http::dump()->withHeaders([
             'Content-Type' => 'application/json;charset=\"utf-8\"',
             'Accept' => 'application/json',
             'Cache-Control' => 'no-cache',
@@ -78,7 +78,7 @@ class CheckoutController extends Controller
         ])->post($endpointUrl, $data);
 
 
-        Log::info('Response Body: ' . $response->body() . ' Response Header '. $response->header());
+        Log::info('Response Body: ' . $response->body() );
 
         dd(json_decode($response->body()));
 
