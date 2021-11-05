@@ -69,11 +69,13 @@ class CheckoutController extends Controller
 
 
 
-        Log::info('Signed Fields: ' . $signed_fields. 'Signed Data'. $signData .' Signature: '.$signature. ' Data: '. json_encode($data) . ' Endpoint: '.$endpointUrl. ' Date: '.$date);
+        Log::info('Signed Fields: ' . $signed_fields. 'Signed Data: '. $signData .' Signature: '.$signature. ' Data: '. json_encode($data) . ' Endpoint: '.$endpointUrl. ' Date: '.$date);
 
 
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
+            'Content-Type' => 'application/json;charset=\"utf-8\"',
+            'Accept' => 'application/json',
+            'Cache-Control' => 'no-cache',
             'Authorization' => 'SELCOM ' . base64_encode(env('API_KEY')),
             'Digest-Method' => 'HS256',
             'Digest' => $signature,
@@ -86,9 +88,7 @@ class CheckoutController extends Controller
 
         Log::info('Response: ' . $response->body());
 
-//        dd(json_decode($response->body()));
-
-        dd($response);
+        dd(json_decode($response->body()));
 
         $paymentGatewayUrl = base64_decode(json_decode($response->body())['data']['payment_gateway_url']);
 
