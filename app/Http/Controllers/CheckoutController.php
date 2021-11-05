@@ -61,10 +61,6 @@ class CheckoutController extends Controller
             $signData .= "&$key=" . $data[$key];
         }
 
-        dd($data, $signData, $signed_fields, env('API_SECRET'), route('webhook'));
-
-
-
         $signature = base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
 
 
@@ -80,7 +76,7 @@ class CheckoutController extends Controller
             'Digest' => $signature,
             'Timestamp' => $requestTimestamp,
             'Signed-Fields' => $signed_fields,
-        ])->post($endpointUrl, $data);
+        ])->post($endpointUrl, $data)->dd();
 
 
         Log::info('Response: ' . $response->body());
