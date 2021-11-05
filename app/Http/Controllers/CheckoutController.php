@@ -64,7 +64,7 @@ class CheckoutController extends Controller
             $signData .= "&$key=" . $data[$key];
         }
 
-        dd($data, $signData, $signed_fields, env('API_SECRET'), route('webhook'));
+//        dd($data, $signData, $signed_fields, env('API_SECRET'), route('webhook'));
 
 
 
