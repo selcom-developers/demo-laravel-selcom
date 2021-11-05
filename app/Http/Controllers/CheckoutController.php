@@ -42,7 +42,7 @@ class CheckoutController extends Controller
             'webhook' => base64_encode(route('webhook')),
             'buyer_remarks' => 'None',
             'merchant_remarks' => 'None',
-            'no_of_items' => 1,
+            'no_of_items' => '1',
             'redirect_url' => base64_encode(route('success')),
         ];
 
