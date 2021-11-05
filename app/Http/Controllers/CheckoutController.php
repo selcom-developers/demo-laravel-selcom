@@ -33,6 +33,9 @@ class CheckoutController extends Controller
         date_default_timezone_set('Africa/Dar_es_Salaam');
         $requestTimestamp = date('c');
 
+        $webhook = base64_encode(route('webhook'));
+        $redirect_url = base64_encode(route('success'));
+
         $data = [
             'vendor' => env('TILL_NUMBER'),
             'order_id' =>  date('His', strtotime($requestTimestamp)),
@@ -41,11 +44,13 @@ class CheckoutController extends Controller
             'buyer_phone' => $validatedData['buyer_phone'],
             'amount' => $validatedData['amount'],
             'currency' => 'TZS',
-            'webhook' => base64_encode(route('webhook')),
+            'webhook' => $webhook,
             'no_of_items' => '1',
-            'redirect_url' => base64_encode(route('success')),
+            'redirect_url' => $redirect_url,
         ];
 
+
+        dump($webhook, $redirect_url);
 
         $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,no_of_items,redirect_url';
 
