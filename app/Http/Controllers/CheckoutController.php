@@ -44,15 +44,15 @@ class CheckoutController extends Controller
             'buyer_phone' => $validatedData['buyer_phone'],
             'amount' => $validatedData['amount'],
             'currency' => 'TZS',
-            'webhook' => $webhook,
+//            'webhook' => $webhook,
             'no_of_items' => '1',
-            'redirect_url' => $redirect_url,
+//            'redirect_url' => $redirect_url,
         ];
 
 
         dump(route('webhook'),$webhook, route('success')  , $redirect_url);
 
-        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,no_of_items,redirect_url';
+        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,no_of_items';
 
         $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
 
