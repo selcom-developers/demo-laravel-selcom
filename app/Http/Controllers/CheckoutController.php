@@ -39,20 +39,17 @@ class CheckoutController extends Controller
             'buyer_phone' => $validatedData['buyer_phone'],
             'amount' => $validatedData['amount'],
             'currency' => 'TZS',
-//            'webhook' => base64_encode(route('webhook')),
+            'webhook' => base64_encode(route('webhook')),
             'buyer_remarks' => 'None',
             'merchant_remarks' => 'None',
             'no_of_items' => 1,
-//            'redirect_url' => base64_encode(route('success')),
+            'redirect_url' => base64_encode(route('success')),
         ];
 
         date_default_timezone_set('Africa/Dar_es_Salaam');
         $requestTimestamp = date('c');
 
-//        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
-
-        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,buyer_remarks,merchant_remarks,no_of_items';
-
+        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
 
         $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
 
@@ -64,14 +61,14 @@ class CheckoutController extends Controller
             $signData .= "&$key=" . $data[$key];
         }
 
-//        dd($data, $signData, $signed_fields, env('API_SECRET'), route('webhook'));
+        dd($data, $signData, $signed_fields, env('API_SECRET'), route('webhook'));
 
 
 
         $signature = base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
 
 
-        Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' . json_encode($data) . ' Endpoint: ' . $endpointUrl);
+        Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' . $data);
 
 
         $response = Http::withHeaders([
