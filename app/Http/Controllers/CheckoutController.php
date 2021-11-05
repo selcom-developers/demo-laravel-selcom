@@ -75,7 +75,7 @@ class CheckoutController extends Controller
 
 
 
-        dump(json_decode($response->body(), true));
+        dd(json_decode($response->body(), true));
 
         $paymentGatewayUrl = base64_decode(json_decode($response->body(), true)['data']['payment_gateway_url']);
 
