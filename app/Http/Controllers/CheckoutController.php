@@ -64,7 +64,7 @@ class CheckoutController extends Controller
         $signature = base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
 
 
-        Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' . $data);
+        Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' .json_encode( $data));
 
 
         $response = Http::withHeaders([
