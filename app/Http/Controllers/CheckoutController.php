@@ -42,25 +42,23 @@ class CheckoutController extends Controller
             'amount' => $validatedData['amount'],
             'currency' => 'TZS',
             'webhook' => base64_encode(route('webhook')),
-            'buyer_remarks' => 'None',
-            'merchant_remarks' => 'None',
             'no_of_items' => '1',
             'redirect_url' => base64_encode(route('success')),
         ];
 
 
-        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
+        $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,no_of_items,redirect_url';
 
         $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
 
         $fieldsOrder = explode(',', $signed_fields);
         $signData = "timestamp=$requestTimestamp";
 
-
         foreach ($fieldsOrder as $key) {
             $signData .= "&$key=" . $data[$key];
         }
 
+        dump($signData);
 
         $signature = base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
 
