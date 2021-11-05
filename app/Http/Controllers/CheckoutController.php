@@ -50,7 +50,7 @@ class CheckoutController extends Controller
         ];
 
 
-        dump($webhook, $redirect_url);
+        dump(route('webhook'),$webhook, route('success')  , $redirect_url);
 
         $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,no_of_items,redirect_url';
 
