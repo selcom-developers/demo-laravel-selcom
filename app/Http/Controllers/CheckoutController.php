@@ -59,7 +59,7 @@ class CheckoutController extends Controller
 
         Log::info('Signed Fields: ' . $signed_fields .  ' Signature: ' . $signature . ' Data: ' . json_encode($data));
 
-        $response = Http::dump()->withHeaders([
+        $response = Http::withHeaders([
             'Content-Type' => 'application/json;charset=\"utf-8\"',
             'Accept' => 'application/json',
             'Cache-Control' => 'no-cache',
@@ -74,6 +74,8 @@ class CheckoutController extends Controller
         Log::info('Response Body: ' . $response->body());
 
 
+
+        dump(json_decode($response->body(), true));
 
         $paymentGatewayUrl = base64_decode(json_decode($response->body(), true)['data']['payment_gateway_url']);
 
