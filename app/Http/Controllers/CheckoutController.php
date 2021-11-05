@@ -76,7 +76,7 @@ class CheckoutController extends Controller
             'Digest' => $signature,
             'Timestamp' => $requestTimestamp,
             'Signed-Fields' => $signed_fields,
-        ])->post($endpointUrl, $data)->dd();
+        ])->post($endpointUrl, $data);
 
 
         Log::info('Response: ' . $response->body());
