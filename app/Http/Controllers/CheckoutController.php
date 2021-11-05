@@ -50,8 +50,6 @@ class CheckoutController extends Controller
         ];
 
 
-        dump(route('webhook'),$webhook, route('success')  , $redirect_url);
-
         $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,no_of_items,redirect_url';
 
         $endpointUrl = env('BASE_URL') . '/checkout/create-order-minimal';
@@ -75,7 +73,7 @@ class CheckoutController extends Controller
 
         Log::info('Response Body: ' . $response->body());
 
-        dd(json_decode($response->body()));
+
 
         $paymentGatewayUrl = base64_decode(json_decode($response->body())['data']['payment_gateway_url']);
 
