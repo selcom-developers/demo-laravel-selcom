@@ -30,10 +30,12 @@ class CheckoutController extends Controller
             'amount' => 'required',
         ]);
 
+        date_default_timezone_set('Africa/Dar_es_Salaam');
+        $requestTimestamp = date('c');
 
         $data = [
             'vendor' => env('TILL_NUMBER'),
-            'order_id' => '123',
+            'order_id' =>  date('His', strtotime($requestTimestamp)),
             'buyer_email' => $validatedData['email'],
             'buyer_name' => $validatedData['buyer_name'],
             'buyer_phone' => $validatedData['buyer_phone'],
@@ -46,8 +48,6 @@ class CheckoutController extends Controller
             'redirect_url' => base64_encode(route('success')),
         ];
 
-        date_default_timezone_set('Africa/Dar_es_Salaam');
-        $requestTimestamp = date('c');
 
         $signed_fields = 'vendor,order_id,buyer_email,buyer_name,buyer_phone,amount,currency,webhook,buyer_remarks,merchant_remarks,no_of_items,redirect_url';
 
@@ -64,7 +64,7 @@ class CheckoutController extends Controller
 
         $signature = base64_encode(hash_hmac('sha256', $signData, env('API_SECRET'), true));
 
-        Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' .json_encode( $data));
+        Log::info('Signed Fields: ' . $signed_fields . 'Signed Data: ' . $signData . ' Signature: ' . $signature . ' Data: ' . json_encode($data));
 
         $response = Http::dump()->withHeaders([
             'Content-Type' => 'application/json;charset=\"utf-8\"',
@@ -78,7 +78,7 @@ class CheckoutController extends Controller
         ])->post($endpointUrl, $data);
 
 
-        Log::info('Response Body: ' . $response->body() );
+        Log::info('Response Body: ' . $response->body());
 
         dd(json_decode($response->body()));
 
